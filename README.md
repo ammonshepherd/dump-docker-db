@@ -25,3 +25,5 @@ container.
     MYSQL_DATABASE=db_name
     DB_FILENAME=filename.sql
     ```
+    - in this case, run the command by itself
+    - `./dump-docker-db.sh`
