@@ -24,7 +24,13 @@ if [ -f .env ]; then
     CONTAINER=$DOCKER_CONTAINER_NAME
     MYSQL_PASS=$MYSQL_ROOT_PASSWORD
     MYSQL_DB=$MYSQL_DATABASE
-    DB_FILE=$DB_FILENAME
+    if [ $DB_FILENAME == '' ]; then
+        # Get the current Year Month Day and seconds since Epoch to use as file name
+        DATE=`date '+%Y-%m-%d-%s'`
+        DB_FILE=${DATE}.sql
+    else
+        DB_FILE=$DB_FILENAME
+    fi
 else
 
     CONTAINER=$1

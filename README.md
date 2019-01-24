@@ -17,7 +17,10 @@ container.
       date and seconds since Epoch.
 
 - Alternatively, you can use a '.env' file to hold the arguments. In this case
-  all fields are required to be in the '.env' file.
+  all fields are required (except the `DB_FILENAME` field) to be in the '.env' file.
+    - If the `DB_FILENAME` option is not in the .env file, then the program
+      generates the file name based on the date and the seconds since the
+      Epoch.
     - The .env file should look like this:
     ```
     DOCKER_CONTAINER_NAME=container_name
