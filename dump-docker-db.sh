@@ -10,7 +10,8 @@
 # The .env file should look like this:
 #
 # DOCKER_CONTAINER_NAME=container_name
-# MYSQL_ROOT_PASSWORD=rootPassword
+# MYSQL_USER=mysqlUser
+# MYSQL_PASSWORD=mysqlPassword
 # MYSQL_DATABASE=db_name
 # DB_FILENAME=filename.sql
 
@@ -22,7 +23,8 @@ if [ -f .env ]; then
     set +a
 
     CONTAINER=$DOCKER_CONTAINER_NAME
-    MYSQL_PASS=$MYSQL_ROOT_PASSWORD
+    MYSQL_USER=$MYSQL_USER
+    MYSQL_PASS=$MYSQL_PASSWORD
     MYSQL_DB=$MYSQL_DATABASE
     if [ -z "${DB_FILENAME}" ]; then
         # Get the current Year Month Day and seconds since Epoch to use as file name
@@ -34,10 +36,11 @@ if [ -f .env ]; then
 else
 
     CONTAINER=$1
-    MYSQL_PASS=$2
-    MYSQL_DB=$3
-    if [ $4 ]; then
-        DB_FILE=$4
+    MYSQL_USER=$2
+    MYSQL_PASS=$3
+    MYSQL_DB=$4
+    if [ $5 ]; then
+        DB_FILE=$5
     else
         # Get the current Year Month Day and seconds since Epoch to use as file name
         DATE=`date '+%Y-%m-%d-%s'`
@@ -45,5 +48,5 @@ else
     fi
 fi
 
-docker exec $CONTAINER sh -c "exec mysqldump -uroot -p'$MYSQL_PASS' $MYSQL_DB" > $DB_FILE
+docker exec $CONTAINER sh -c "exec mysqldump -u'$MYSQL_USER' -p'$MYSQL_PASS' $MYSQL_DB" > $DB_FILE
 
