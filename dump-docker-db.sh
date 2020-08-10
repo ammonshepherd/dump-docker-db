@@ -14,8 +14,20 @@
 # MYSQL_PASSWORD=mysqlPassword
 # MYSQL_DATABASE=db_name
 # DB_FILENAME=filename.sql
+if [ -n "$1"  ]; then
+    CONTAINER=$1
+    MYSQL_USER=$2
+    MYSQL_PASS=$3
+    MYSQL_DB=$4
+    if [ $5 ]; then
+        DB_FILE=$5
+    else
+        # Get the current Year Month Day and seconds since Epoch to use as file name
+        DATE=`date '+%Y-%m-%d-%s'`
+        DB_FILE=${DATE}.sql
+    fi
 
-if [ -f .env ]; then
+elif [ -f .env ]; then
 
     # Get environment variables
     set -a
@@ -34,18 +46,8 @@ if [ -f .env ]; then
         DB_FILE=$DB_FILENAME
     fi
 else
+    echo "No connection information provided."
 
-    CONTAINER=$1
-    MYSQL_USER=$2
-    MYSQL_PASS=$3
-    MYSQL_DB=$4
-    if [ $5 ]; then
-        DB_FILE=$5
-    else
-        # Get the current Year Month Day and seconds since Epoch to use as file name
-        DATE=`date '+%Y-%m-%d-%s'`
-        DB_FILE=${DATE}.sql
-    fi
 fi
 
 docker exec $CONTAINER sh -c "exec mysqldump -u'$MYSQL_USER' -p'$MYSQL_PASS' $MYSQL_DB" > $DB_FILE
